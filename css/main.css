@@ -2,3 +2,18 @@
 #container {
 	height:800px;
 }
+
+#spanhit {
+	color: #2d2a2a;
+	font-weight: bold;
+}
+
+#spankilled {
+	color: #c62104;
+	font-weight: bold;
+}
+
+#spanunknown {
+	color: #d5d618;
+	font-weight: bold;
+}

@@ -1,43 +1,89 @@
+// python -m SimpleHTTPServer 8080
+// ^^^^ REMOVE BEFORE TURN IN!!!
+
+var map;
 // Function to draw your map
 var drawMap = function() {
-
-  // Create map and set view
-  var map = L.map('container').setView([38.617, -92.284], 4)
-
-  // Create a tile layer variable using the appropriate url
+  map = L.map('container').setView([38.617, -92.284], 4)
   var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png')
-
-  // Add the layer to your map
   layer.addTo(map)
-
-  // Execute your function to get data
   getData();
  
 }
 
 // Function for getting data
 var getData = function() {
-
-  // Execute an AJAX request to get the data in data/response.js
   $.ajax({
-	  url: "file:///C:/Users/Alex/Documents/Info%20343/police-shooting/data/response.json",
+	  url: "http://localhost:8080/Documents/Info%20343/police-shooting/data/response.json",
 	  success: function(data) {
-	  	console.log("here");
+	  	customBuild(data);
 	  },
 	  dataType: "json"
 	});
-
-
-  // When your request is successful, call your customBuild function
-
 }
 
 // Loop through your data and add the appropriate layers and points
-var customBuild = function() {
-	// Be sure to add each layer to the map
+var customBuild = function(data) {
+  var unknown = new L.LayerGroup([]);
+  var white = new L.LayerGroup([]);
+  var black = new L.LayerGroup([]);
+  var asian = new L.LayerGroup([]);
+  var amIndian = new L.LayerGroup([]);
+  var pacificIslander = new L.LayerGroup([]);
 
-	// Once layers are on the map, add a leaflet controller that shows/hides layers
-  
+  data.map(function(item) { 
+    var killed = item['Hit or Killed?'];
+    var options;
+    if (killed == "Killed") {
+      options = {fillColor: "#c62104", color: "#c62104", fillOpacity: ".5"};
+    } else if (killed == "Hit") {
+      options = {fillColor: "#2d2a2a", color: "#2d2a2a", fillOpacity: ".5"};
+    } else if (killed == "Unknown" || typeof killed == "undefined") {
+      options = {fillColor: "#d5d618", color: "#d5d618", fillOpacity: ".5"};
+    }
+
+    var circle = new L.circleMarker([item.lat, item.lng], options);
+    circle.setRadius(5);
+    var race = item.Race;
+    if (race != "Unknown" && typeof race != "undefined") {
+      if (race == "White") {
+        circle.addTo(white);
+      } else if (race == "Black or African American") {
+        circle.addTo(black);
+      } else if (race == "Asian") {
+        circle.addTo(asian);
+      } else if (race == "American Indian or Alaska Native") {
+        circle.addTo(amIndian);
+      } else {
+        // Native Hawaiian or Other Pacific Islander
+        circle.addTo(pacificIslander);
+      }
+    } else {
+      // Unknown or undefined
+      circle.addTo(unknown);
+    }
+
+    var popupContext = "";
+
+    if (typeof item.Summary != "undefined") {
+      popupContext += item.Summary;
+    } else {
+      popupContext += "No Summary Available";
+    }
+    if (typeof item["Source Link"] != "undefined") {
+      popupContext += " (" + "link".link(item["Source Link"]) +")";
+    }
+    circle.bindPopup(popupContext);
+  });
+
+  unknown.addTo(map);
+  white.addTo(map);
+  black.addTo(map);
+  asian.addTo(map);
+  amIndian.addTo(map);
+  pacificIslander.addTo(map);
+
+  L.control.layers(null,{"Unknown": unknown, "White": white, "Black or African American": black, "Asian": asian, "American Indian or Alaska Native": amIndian, "Native Hawaiian or Other Pacific Islander": pacificIslander}).addTo(map); 
 }
 
 
