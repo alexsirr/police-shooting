@@ -30,24 +30,39 @@ var customBuild = function(data) {
   var asian = new L.LayerGroup([]);
   var amIndian = new L.LayerGroup([]);
   var pacificIslander = new L.LayerGroup([]);
+  var shootingData = {whiteKilled: 0, whiteHit: 0, otherKilled: 0, otherHit: 0};
 
   data.map(function(item) { 
+  	var race = item.Race;
     var killed = item['Hit or Killed?'];
     var options;
     if (killed == "Killed") {
       options = {fillColor: "#c62104", color: "#c62104", fillOpacity: ".5"};
+
+      if (race == "White") {
+      	shootingData.whiteKilled += 1;
+      } else {
+      	shootingData.otherKilled += 1;
+      }
     } else if (killed == "Hit") {
       options = {fillColor: "#2d2a2a", color: "#2d2a2a", fillOpacity: ".5"};
+
+      if (race == "White") {
+      	shootingData.whiteHit += 1;
+      } else {
+      	shootingData.otherHit += 1;
+      }
     } else if (killed == "Unknown" || typeof killed == "undefined") {
       options = {fillColor: "#d5d618", color: "#d5d618", fillOpacity: ".5"};
     }
 
     var circle = new L.circleMarker([item.lat, item.lng], options);
     circle.setRadius(5);
-    var race = item.Race;
+
     if (race != "Unknown" && typeof race != "undefined") {
       if (race == "White") {
         circle.addTo(white);
+        shootingData.whiteHit += 1;
       } else if (race == "Black or African American") {
         circle.addTo(black);
       } else if (race == "Asian") {
@@ -84,6 +99,9 @@ var customBuild = function(data) {
   pacificIslander.addTo(map);
 
   L.control.layers(null,{"Unknown": unknown, "White": white, "Black or African American": black, "Asian": asian, "American Indian or Alaska Native": amIndian, "Native Hawaiian or Other Pacific Islander": pacificIslander}).addTo(map); 
+  fillTable();
 }
 
-
+function fillTable() {
+	$(".tdata").text("TEST")
+}
