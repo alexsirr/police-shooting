@@ -10,7 +10,7 @@ var drawMap = function() {
 // Function for getting data
 var getData = function() {
   $.ajax({
-	  url: "/data/response.json",
+	  url: "/sirra/info343/police-shooting/data/response.json",
 	  success: function(data) {
 	  	customBuild(data);
 	  },
