@@ -1,6 +1,6 @@
-/* You'll probably want to add some styles here */
 #container {
 	height:800px;
+	margin-bottom: 50px;
 }
 
 #spanhit {
@@ -20,4 +20,17 @@
 
 .tbodystart  {
 	font-weight: bold;
+}
+
+body {
+	font-family: "Verdana";
+}
+
+h1 {
+	font-weight: bold;
+	text-align: center;
+}
+
+p {
+	text-align: center;
 }

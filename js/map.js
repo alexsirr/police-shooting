@@ -1,6 +1,3 @@
-// python -m SimpleHTTPServer 8080
-// ^^^^ REMOVE BEFORE TURN IN!!!
-
 var map;
 // Function to draw your map
 var drawMap = function() {
@@ -8,13 +5,12 @@ var drawMap = function() {
   var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png')
   layer.addTo(map)
   getData();
- 
 }
 
 // Function for getting data
 var getData = function() {
   $.ajax({
-	  url: "http://localhost:8080/Documents/Info%20343/police-shooting/data/response.json",
+	  url: "../data/response.json",
 	  success: function(data) {
 	  	customBuild(data);
 	  },
@@ -36,6 +32,7 @@ var customBuild = function(data) {
   	var race = item.Race;
     var killed = item['Hit or Killed?'];
     var options;
+
     if (killed == "Killed") {
       options = {fillColor: "#c62104", color: "#c62104", fillOpacity: ".5"};
 
@@ -99,9 +96,12 @@ var customBuild = function(data) {
   pacificIslander.addTo(map);
 
   L.control.layers(null,{"Unknown": unknown, "White": white, "Black or African American": black, "Asian": asian, "American Indian or Alaska Native": amIndian, "Native Hawaiian or Other Pacific Islander": pacificIslander}).addTo(map); 
-  fillTable();
+  fillTable(shootingData);
 }
 
-function fillTable() {
-	$(".tdata").text("TEST")
+function fillTable(data) {
+	$(".tdata:eq(0)").text(data.whiteKilled);
+  $(".tdata:eq(1)").text(data.otherKilled)
+  $(".tdata:eq(2)").text(data.whiteHit);
+  $(".tdata:eq(3)").text(data.otherHit)
 }
