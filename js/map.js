@@ -101,7 +101,7 @@ var customBuild = function(data) {
 
 function fillTable(data) {
 	$(".tdata:eq(0)").text(data.whiteKilled);
-  $(".tdata:eq(1)").text(data.otherKilled)
-  $(".tdata:eq(2)").text(data.whiteHit);
-  $(".tdata:eq(3)").text(data.otherHit)
+ 	$(".tdata:eq(1)").text(data.otherKilled)
+ 	$(".tdata:eq(2)").text(data.whiteHit);
+	$(".tdata:eq(3)").text(data.otherHit)
 }
